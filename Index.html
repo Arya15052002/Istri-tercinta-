@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Istriku Tersayang & Calon Buah Hati Kita ❤️</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rose-gold': '#B76E79',
+                        'soft-pink': '#FFF0F5',
+                        'blush': '#FFD1DC',
+                        'warm-cream': '#FAF0E6',
+                        'deep-rose': '#C2185B',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        cursive: ['Dancing Script', 'cursive'],
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Canvas Confetti JS untuk Efek Kejutan -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* Custom Styles & Animations */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #FFF0F5 0%, #FAF0E6 50%, #FFE4E1 100%);
+            color: #4A3E3D;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Floating Background Elements */
+        .floating-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            background: rgba(255, 182, 193, 0.6);
+            border-radius: 150% 0 150% 0;
+            animation: animatePetal 12s linear infinite;
+        }
+
+        .heart-bg {
+            position: absolute;
+            color: rgba(230, 115, 150, 0.25);
+            animation: animateHeart 15s linear infinite;
+        }
+
+        @keyframes animatePetal {
+            0% {
+                opacity: 0;
+                transform: translateY(-10vh) rotate(0deg) scale(0.5);
+            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% {
+                opacity: 0;
+                transform: translateY(105vh) rotate(720deg) scale(1.2);
+            }
+        }
+
+        @keyframes animateHeart {
+            0% {
+                transform: translateY(100vh) scale(0.3) rotate(0deg);
+                opacity: 0;
+            }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Glassmorphism Card Style */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 15px 35px rgba(183, 110, 121, 0.15);
+        }
+
+        /* Pulsing Heart Animation */
+        .pulse-heart {
+            animation: heartBeat 1.4s infinite ease-in-out;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.18); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.18); }
+            70% { transform: scale(1); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF0F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B76E79;
+            border-radius: 10px;
+        }
+
+        .photo-frame {
+            border: 8px solid #FFFFFF;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+        }
+        .photo-frame:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 15px 30px rgba(183, 110, 121, 0.25);
+        }
+
+        /* Audio Player Custom Pulse Wave */
+        .playing-wave {
+            display: inline-block;
+            width: 3px;
+            height: 12px;
+            background-color: #B76E79;
+            border-radius: 2px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        .playing-wave:nth-child(2) { animation-delay: 0.2s; }
+        .playing-wave:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes wave {
+            0%, 100% { height: 6px; }
+            50% { height: 18px; }
+        }
+
+        .paused .playing-wave {
+            animation: none;
+            height: 6px;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+
+    <!-- Floating Background Elements -->
+    <div class="floating-container" id="floatingContainer"></div>
+
+    <!-- Main Outer Container -->
+    <div class="max-w-3xl mx-auto relative z-10 space-y-8">
+
+        <!-- Sticky Floating Music Player & Autoplay Banner Status -->
+        <div class="glass-card rounded-2xl p-4 flex items-center justify-between sticky top-4 z-50 backdrop-blur-md border border-white/80 shadow-lg">
+            <div class="flex items-center space-x-3">
+                <button id="playBtn" onclick="toggleAudio()" class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-400 to-rose-400 text-white flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all">
+                    <i id="playIcon" class="fas fa-music text-lg"></i>
+                </button>
+                <div>
+                    <h4 class="text-[10px] sm:text-xs uppercase tracking-wider text-rose-800/70 font-bold flex items-center gap-1">
+                        <span>Lagu Cinta Romantis</span>
+                        <span id="audioStatusText" class="text-rose-500 font-normal">(Memutar...)</span>
+                    </h4>
+                    <p id="songTitle" class="text-xs sm:text-sm font-semibold text-gray-800 truncate max-w-[170px] sm:max-w-xs">Melodi Kasih Sayang Untuk Bunda</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-1 px-3" id="waveContainer">
+                <span class="playing-wave"></span>
+                <span class="playing-wave"></span>
+                <span class="playing-wave"></span>
+            </div>
+
+            <!-- Audio Element dengan Autoplay Fallback -->
+            <audio id="bgMusic" loop autoplay preload="auto">
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                Browser Anda tidak mendukung musik audio.
+            </audio>
+        </div>
+
+        <!-- Header / Main Banner -->
+        <div class="glass-card rounded-3xl p-8 sm:p-10 text-center relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-pink-200/50 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-rose-200/50 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="inline-block p-4 bg-pink-100/80 rounded-full mb-4">
+                <i class="fas fa-heart text-3xl sm:text-4xl text-rose-500 pulse-heart"></i>
+            </div>
+            
+            <h1 class="font-serif text-3xl sm:text-5xl font-bold text-gray-800 mb-2 leading-tight">
+                Untuk Istriku Tersayang
+            </h1>
+            <p class="font-cursive text-2xl sm:text-3xl text-rose-600 font-semibold mb-4">
+                & Calon Ibu Luar Biasa ✨❤️
+            </p>
+            <p class="text-sm sm:text-base text-gray-600 max-w-md mx-auto font-light leading-relaxed">
+                Terima kasih sudah menjaga malaikat kecil kita di dalam rahimmu. Setiap detik perjuanganmu adalah bentuk cinta paling murni yang pernah kulihat.
+            </p>
+        </div>
+
+        <!-- Live Countdown Timer HPL (20 November 2026) -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+            <div class="text-center mb-6">
+                <span class="bg-rose-100 text-rose-700 text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider">Hari Perkiraan Lahir (HPL)</span>
+                <h2 class="font-serif text-2xl sm:text-3xl text-gray-800 font-bold mt-2">20 November 2026 👶🍼</h2>
+                <p class="text-xs text-gray-500 mt-1">Hitung mundur menuju momen terindah pelukan pertama buah hati kita</p>
+            </div>
+
+            <!-- Countdown Timer Blocks -->
+            <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+                <div class="bg-white/90 p-3 sm:p-4 rounded-2xl shadow-sm border border-rose-100">
+                    <span id="days" class="block font-serif text-2xl sm:text-4xl font-bold text-rose-600">---</span>
+                    <span class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase">Hari</span>
+                </div>
+                <div class="bg-white/90 p-3 sm:p-4 rounded-2xl shadow-sm border border-rose-100">
+                    <span id="hours" class="block font-serif text-2xl sm:text-4xl font-bold text-rose-600">--</span>
+                    <span class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase">Jam</span>
+                </div>
+                <div class="bg-white/90 p-3 sm:p-4 rounded-2xl shadow-sm border border-rose-100">
+                    <span id="minutes" class="block font-serif text-2xl sm:text-4xl font-bold text-rose-600">--</span>
+                    <span class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase">Menit</span>
+                </div>
+                <div class="bg-white/90 p-3 sm:p-4 rounded-2xl shadow-sm border border-rose-100">
+                    <span id="seconds" class="block font-serif text-2xl sm:text-4xl font-bold text-rose-600">--</span>
+                    <span class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase">Detik</span>
+                </div>
+            </div>
+
+            <!-- Pregnancy Encouragement Message -->
+            <div class="mt-6 bg-rose-50/80 rounded-2xl p-4 flex items-center space-x-3 border border-rose-100">
+                <div class="bg-rose-500 text-white p-3 rounded-xl flex-shrink-0">
+                    <i class="fas fa-baby-carriage text-xl"></i>
+                </div>
+                <p class="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                    Setiap detakan jantung si kecil adalah janji cinta kita. Istirahat yang cukup ya sayang, aku selalu siap menemani di setiap langkahmu.
+                </p>
+            </div>
+        </div>
+
+        <!-- Surat Cinta Rahasia / Interactive Secret Letter -->
+        <div class="glass-card rounded-3xl p-6 sm:p-10 relative text-center">
+            <div id="envelopeCover" class="space-y-4 py-4">
+                <div class="w-16 h-16 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-3xl mx-auto pulse-heart">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3 class="font-serif text-2xl font-bold text-gray-800">Surat Rahasia Dari Suamimu</h3>
+                <p class="text-xs sm:text-sm text-gray-600 max-w-sm mx-auto">Ada ungkapan hangat dari lubuk hatiku yang paling dalam khusus untukmu hari ini.</p>
+                <button onclick="openSecretLetter()" class="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-full font-semibold shadow-md transition-all active:scale-95 text-sm">
+                    <i class="fas fa-envelope-open mr-1"></i> Buka Surat Rahasia ❤️
+                </button>
+            </div>
+
+            <!-- Hidden Letter Content -->
+            <div id="letterContent" class="hidden space-y-4 text-left text-gray-700 text-sm sm:text-base leading-relaxed font-light border-t border-rose-100 pt-6">
+                <div class="flex items-center justify-between border-b border-rose-100 pb-3 mb-2">
+                    <span class="font-serif font-bold text-rose-800 text-lg">Istriku Yang Sangat Kucintai,</span>
+                    <span class="font-cursive text-rose-500 text-lg">Dengan Seluruh Jiwaku</span>
+                </div>
+                <p>
+                    Melihatmu menjalani masa kehamilan ini membuat rasa kagum dan hormatku padamu semakin tumbuh setiap harinya. Aku tahu perjalanan ini tak selalu mudah—ada rasa lelah, mual, pegal, dan perubahan fisik yang kamu lalui demi mengandung malaikat kecil kita.
+                </p>
+                <p>
+                    Namun, di balik semua kelelahan itu, ketabahan dan kehangatanmu adalah hal yang paling indah. Kamu adalah calon ibu yang luar biasa, dan aku sangat beruntung memilikimu sebagai pendamping hidupku.
+                </p>
+                <p>
+                    Menuju bulan November 2026 nanti, percayalah aku akan selalu berada di sampingmu. Aku siap memegang tanganmu saat kamu lelah, mendengarkan semua cerita dan keluh kesahmu, serta menyambut buah hati kita bersama-sama.
+                </p>
+                <div class="text-right pt-4">
+                    <p class="font-cursive text-2xl text-rose-600 font-bold">Suamimu yang Selalu Mencintaimu ❤️</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Gallery / USG & Memories Frame -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8">
+            <div class="text-center mb-6">
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-gray-800">Galeri Momen Indah Kita</h2>
+                <p class="text-xs sm:text-sm text-gray-500">Rekaman jejak cinta & kehadiran si kecil</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Frame 1: Foto Bersama -->
+                <div class="photo-frame rounded-2xl overflow-hidden bg-white p-3 text-center">
+                    <div class="aspect-square bg-gray-100 rounded-xl overflow-hidden relative mb-3">
+                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&q=80&w=600" alt="Momen Bersama" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-serif font-semibold text-gray-800 text-sm">Awal Perjalanan Cinta</p>
+                    <p class="text-xs text-gray-500">Selalu bergandengan tangan dalam suka & duka</p>
+                </div>
+
+                <!-- Frame 2: Foto USG / Momen Kehamilan -->
+                <div class="photo-frame rounded-2xl overflow-hidden bg-white p-3 text-center">
+                    <div class="aspect-square bg-gray-100 rounded-xl overflow-hidden relative mb-3">
+                        <img src="https://images.unsplash.com/photo-1544126592-807ade215a0b?auto=format&fit=crop&q=80&w=600" alt="Momen Kehamilan" class="w-full h-full object-cover">
+                    </div>
+                    <p class="font-serif font-semibold text-gray-800 text-sm">Malaikat Kecil Kita</p>
+                    <p class="text-xs text-gray-500">Tak sabar memelukmu di November 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Quote / Doa Generator -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 text-center space-y-4">
+            <h3 class="font-serif text-xl sm:text-2xl font-bold text-gray-800">
+                Doa & Ucapan Spesial Hari Ini 🌸
+            </h3>
+            
+            <div id="quoteDisplay" class="bg-white/90 p-5 rounded-2xl border border-rose-100 shadow-inner min-h-[90px] flex items-center justify-center transition-all duration-300">
+                <p class="text-sm sm:text-base text-gray-700 italic font-serif">
+                    "Klik tombol di bawah ini untuk mengambil ucapan manis hari ini..."
+                </p>
+            </div>
+
+            <button onclick="nextQuote()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-rose-400 to-pink-500 text-white rounded-full font-semibold shadow-lg hover:shadow-rose-300/50 hover:scale-105 active:scale-95 transition-all text-sm sm:text-base flex items-center justify-center gap-2 mx-auto">
+                <i class="fas fa-sparkles"></i> Acak Doa & Ucapan Hari Ini
+            </button>
+        </div>
+
+        <!-- Surprise Note Modal & Celebration Buttons -->
+        <div class="glass-card rounded-3xl p-8 text-center space-y-6">
+            <h3 class="font-serif text-2xl font-bold text-gray-800">
+                Kirim Cinta & Kejutan ❤️
+            </h3>
+            <p class="text-xs sm:text-sm text-gray-600">
+                Tekan tombol di bawah untuk menghiasi layarmu dengan hujan kelopak bunga & doa keselamatan!
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="triggerPetalConfetti()" class="w-full sm:w-auto px-6 py-3 bg-pink-100 text-rose-700 hover:bg-pink-200 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 border border-pink-200 shadow-sm active:scale-95">
+                    <i class="fas fa-heart text-rose-500"></i>
+                    Love Rain Effect (Hujan Bunga)
+                </button>
+
+                <button onclick="openSurpriseModal()" class="w-full sm:w-auto px-6 py-3 bg-rose-500 text-white hover:bg-rose-600 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 shadow-md active:scale-95">
+                    <i class="fas fa-praying-hands"></i>
+                    Doa Ibu & Calon Bayi
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-xs text-gray-500 py-4 font-light">
+            Dibuat penuh cinta oleh Suamimu • Selamanya Bersamamu & Buah Hati Kita
+        </div>
+
+    </div>
+
+    <!-- Surprise Modal Popup -->
+    <div id="surpriseModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-card bg-white/95 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center relative shadow-2xl border border-white transform scale-95 transition-transform duration-300" id="modalCard">
+            <button onclick="closeSurpriseModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+
+            <div class="w-16 h-16 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fas fa-hand-holding-heart"></i>
+            </div>
+
+            <h3 class="font-serif text-2xl font-bold text-gray-800 mb-2">Doa Tulus Untuk Bunda & Bayi 🤲✨</h3>
+            
+            <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6 font-light">
+                "Ya Allah, lindungilah istriku tersayang dan calon buah hati kami yang ada di dalam kandungannya. Berikanlah kesehatan, kekuatan, kelancaran, serta kebahagiaan hingga persalinan di bulan November 2026 nanti."
+            </p>
+
+            <button onclick="closeSurpriseModal()" class="w-full py-3 bg-rose-500 text-white rounded-xl font-semibold hover:bg-rose-600 transition-all shadow-md">
+                Amiin Ya Rabbal 'Alamin ❤️
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript logic -->
+    <script>
+        /* 1. Generate Floating Background Petals & Hearts */
+        function createFloatingElements() {
+            const container = document.getElementById('floatingContainer');
+            const totalElements = 22;
+
+            for (let i = 0; i < totalElements; i++) {
+                const isHeart = Math.random() > 0.5;
+                const elem = document.createElement('div');
+                
+                if (isHeart) {
+                    elem.className = 'heart-bg fas fa-heart';
+                    elem.style.fontSize = `${Math.random() * 16 + 10}px`;
+                } else {
+                    elem.className = 'petal';
+                    const size = Math.random() * 12 + 8;
+                    elem.style.width = `${size}px`;
+                    elem.style.height = `${size * 1.5}px`;
+                }
+
+                elem.style.left = `${Math.random() * 100}%`;
+                elem.style.animationDuration = `${Math.random() * 8 + 8}s`;
+                elem.style.animationDelay = `${Math.random() * 5}s`;
+                
+                container.appendChild(elem);
+            }
+        }
+
+        /* 2. Audio Autoplay and Controls with Smart Fallback */
+        const bgMusic = document.getElementById('bgMusic');
+        const playIcon = document.getElementById('playIcon');
+        const waveContainer = document.getElementById('waveContainer');
+        const audioStatusText = document.getElementById('audioStatusText');
+
+        function startAudio() {
+            bgMusic.play().then(() => {
+                playIcon.className = 'fas fa-pause text-lg';
+                waveContainer.classList.remove('paused');
+                audioStatusText.innerText = '(Memutar...)';
+            }).catch(error => {
+                // Autoplay ditolak browser sebelum ada interaksi pengguna
+                playIcon.className = 'fas fa-play text-lg ml-0.5';
+                waveContainer.classList.add('paused');
+                audioStatusText.innerText = '(Klik untuk Putar 🎵)';
+            });
+        }
+
+        function toggleAudio() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                playIcon.className = 'fas fa-pause text-lg';
+                waveContainer.classList.remove('paused');
+                audioStatusText.innerText = '(Memutar...)';
+            } else {
+                bgMusic.pause();
+                playIcon.className = 'fas fa-play text-lg ml-0.5';
+                waveContainer.classList.add('paused');
+                audioStatusText.innerText = '(Jeda)';
+            }
+        }
+
+        // Jalankan autoplay pada interaksi pertama jika diblokir browser
+        function setupFirstInteractionAudio() {
+            const enableAudioOnInteraction = () => {
+                if (bgMusic.paused) {
+                    bgMusic.play().then(() => {
+                        playIcon.className = 'fas fa-pause text-lg';
+                        waveContainer.classList.remove('paused');
+                        audioStatusText.innerText = '(Memutar...)';
+                    }).catch(() => {});
+                }
+                document.removeEventListener('click', enableAudioOnInteraction);
+                document.removeEventListener('touchstart', enableAudioOnInteraction);
+            };
+
+            document.addEventListener('click', enableAudioOnInteraction);
+            document.addEventListener('touchstart', enableAudioOnInteraction);
+        }
+
+        /* 3. Pregnancy Due Date Countdown Logic (Target: 20 November 2026) */
+        const hplDate = new Date('November 20, 2026 00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = hplDate - now;
+
+            if (distance < 0) {
+                document.getElementById('days').innerText = "0";
+                document.getElementById('hours').innerText = "00";
+                document.getElementById('minutes').innerText = "00";
+                document.getElementById('seconds').innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+        }
+
+        /* 4. Secret Letter Feature */
+        function openSecretLetter() {
+            const envelope = document.getElementById('envelopeCover');
+            const content = document.getElementById('letterContent');
+            
+            envelope.classList.add('hidden');
+            content.classList.remove('hidden');
+
+            triggerPetalConfetti();
+        }
+
+        /* 5. Quotes / Doa Generator */
+        const loveQuotes = [
+            "Kamu tetap menjadi wanita paling cantik di mataku, dengan aura keibuan yang kian menawan.",
+            "Melihat perutmu yang semakin mengembang, rasa cintaku juga ikut berlipat ganda setiap harinya.",
+            "Terima kasih atas segala ketabahan dan rasa lelahmu saat menjaga calon buah hati kita.",
+            "Mual, lelah, dan keletihanmu adalah bukti cinta sejati seorang ibu yang paling tulus.",
+            "Aku berjanji akan selalu menjadi suami yang siaga, merawatmu, dan membahagiakanmu.",
+            "Setiap detik menuju November 2026 adalah penantian paling indah dalam hidupku bersamamu."
+        ];
+        
+        let quoteIndex = 0;
+        function nextQuote() {
+            const display = document.getElementById('quoteDisplay');
+            display.style.opacity = 0;
+            
+            setTimeout(() => {
+                display.innerHTML = `<p class="text-sm sm:text-base text-rose-800 font-medium italic font-serif">"${loveQuotes[quoteIndex]}"</p>`;
+                display.style.opacity = 1;
+                quoteIndex = (quoteIndex + 1) % loveQuotes.length;
+            }, 300);
+
+            confetti({
+                particleCount: 25,
+                spread: 50,
+                origin: { y: 0.8 },
+                colors: ['#FFB6C1', '#FFC0CB', '#B76E79']
+            });
+        }
+
+        /* 6. Confetti Effect (Hujan Kelopak Bunga & Hati) */
+        function triggerPetalConfetti() {
+            confetti({
+                particleCount: 80,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#FF69B4', '#FFB6C1', '#FFD1DC', '#C2185B'],
+                scalar: 1.2
+            });
+        }
+
+        /* 7. Modal Functions */
+        function openSurpriseModal() {
+            const modal = document.getElementById('surpriseModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }, 10);
+
+            triggerPetalConfetti();
+        }
+
+        function closeSurpriseModal() {
+            const modal = document.getElementById('surpriseModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.add('opacity-0');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        /* Initialize Features on Load */
+        window.onload = function() {
+            createFloatingElements();
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+            startAudio();
+            setupFirstInteractionAudio();
+        };
+    </script>
+</body>
+</html>
